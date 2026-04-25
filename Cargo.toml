@@ -1,0 +1,11 @@
+[package]
+name = "stripconf"
+version = "0.1.0"
+edition = "2021"
+description = "TUI configuration tool for the strip status bar"
+authors = ["Geir Isene <g@isene.com>"]
+license = "Unlicense"
+repository = "https://github.com/isene/stripconf"
+
+[dependencies]
+fe2o3-crust = { path = "../crust" }
