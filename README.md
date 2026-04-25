@@ -93,7 +93,7 @@ mv ~/.striprc.bak ~/.striprc
 (stripconf only writes `.bak` after a successful `.tmp` write, so this
 file is always either the previous saved state or absent.)
 
-## Part of the CHasm Suite
+## Part of the [CHasm](https://github.com/isene/chasm) Suite
 
 | Tool | Purpose |
 |------|---------|
