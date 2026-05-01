@@ -1,6 +1,6 @@
 [package]
 name = "stripconf"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "TUI configuration tool for the strip status bar"
 authors = ["Geir Isene <g@isene.com>"]

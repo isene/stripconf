@@ -152,9 +152,17 @@ impl App {
             if let Some((k, v)) = trimmed.split_once('=') {
                 let key = k.trim();
                 let val = v.trim();
-                self.apply_global(key, val);
-                // Globals don't take comment ownership; keep them
-                // pending for the next segment that comes along.
+                if self.apply_global(key, val) {
+                    // Recognised global; the hardcoded globals block
+                    // in save_config() will re-emit it from struct
+                    // state. Don't push to pending or it would be
+                    // duplicated in the output.
+                    continue;
+                }
+                // Unknown key: preserve the original line verbatim so
+                // a future strip option (or a hand-edited key) survives
+                // a glassconf-style round-trip clobber.
+                pending.push(raw.to_string());
                 continue;
             }
 
@@ -181,17 +189,21 @@ impl App {
         }
     }
 
-    fn apply_global(&mut self, key: &str, val: &str) {
+    // Apply a global `key = value` line. Returns true if `key` is a
+    // known global (so the caller can drop the source line — save
+    // re-emits it from struct state); false if unknown (the caller
+    // preserves the verbatim line).
+    fn apply_global(&mut self, key: &str, val: &str) -> bool {
         match key {
-            "height"     => if let Ok(n) = val.parse() { self.globals.height = n; }
-            "top_offset" => if let Ok(n) = val.parse() { self.globals.top_offset = n; }
-            "bg"         => if normalize_hex(val).is_some() { self.globals.bg = normalize_hex(val).unwrap(); }
-            "fg"         => if normalize_hex(val).is_some() { self.globals.fg = normalize_hex(val).unwrap(); }
-            "gap"        => if let Ok(n) = val.parse() { self.globals.gap = n; }
-            "font"       => self.globals.font = val.to_string(),
-            "char_width" => if let Ok(n) = val.parse() { self.globals.char_width = n; }
-            "baseline"   => if let Ok(n) = val.parse() { self.globals.baseline = n; }
-            _ => {}
+            "height"     => { if let Ok(n) = val.parse() { self.globals.height = n; } true }
+            "top_offset" => { if let Ok(n) = val.parse() { self.globals.top_offset = n; } true }
+            "bg"         => { if normalize_hex(val).is_some() { self.globals.bg = normalize_hex(val).unwrap(); } true }
+            "fg"         => { if normalize_hex(val).is_some() { self.globals.fg = normalize_hex(val).unwrap(); } true }
+            "gap"        => { if let Ok(n) = val.parse() { self.globals.gap = n; } true }
+            "font"       => { self.globals.font = val.to_string(); true }
+            "char_width" => { if let Ok(n) = val.parse() { self.globals.char_width = n; } true }
+            "baseline"   => { if let Ok(n) = val.parse() { self.globals.baseline = n; } true }
+            _ => false,
         }
     }
 
