@@ -286,12 +286,12 @@ impl App {
 
     fn fg24(text: &str, hex: &str) -> String {
         if let Some((r, g, b)) = parse_hex(hex) {
-            format!("\x1b[38;2;{};{};{}m{}\x1b[0m", r, g, b, text)
+            style::rgb(text, Some((r, g, b)), None, "")
         } else { text.to_string() }
     }
     fn bg24(text: &str, hex: &str) -> String {
         if let Some((r, g, b)) = parse_hex(hex) {
-            format!("\x1b[48;2;{};{};{}m{}\x1b[0m", r, g, b, text)
+            style::rgb(text, None, Some((r, g, b)), "")
         } else { text.to_string() }
     }
 
