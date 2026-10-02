@@ -71,9 +71,9 @@ char_width = 0                 # 0 = default
 baseline   = 0                 # 0 = default
 
 # segment NAME [+EXTRA_GAP] [#RRGGBB] CMD [args...] [INTERVAL_S]
-segment time     +16 #ffffff /home/geir/.../clock           1
-segment cpu          #aaaaaa /home/geir/.../cpu             4
-# segment dnd      #ffffff /home/geir/.../dnd-indicator     5    # disabled
+segment time     +16 #ffffff /home/you/.../clock           1
+segment cpu          #aaaaaa /home/you/.../cpu             4
+# segment dnd      #ffffff /home/you/.../dnd-indicator     5    # disabled
 ```
 
 A trailing decimal integer on a `segment` line (preceded by whitespace)
